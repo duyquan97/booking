@@ -22,11 +22,16 @@ class BookingController extends AbstractController
 {
     /**
      * @Route("/", name="booking_index", methods={"GET"})
+     * @IsGranted("ROLE_USER")
      */
     public function index(BookingRepository $bookingRepository): Response
     {
+        $user = '';
+        if ($this->isGranted("ROLE_USER") && !$this->isGranted("ROLE_ADMIN")) {
+            $user = $this->getUser();
+        }
         return $this->render('booking/index.html.twig', [
-            'bookings' => $bookingRepository->findAll(),
+            'bookings' => $bookingRepository->findByUser($user),
         ]);
     }
 
@@ -37,6 +42,7 @@ class BookingController extends AbstractController
     public function new(Request $request, RoomRepository $roomRepository, SetRoomRepository $setRoomRepository): Response
     {
         $session = new Session();
+        $session->start();
         !empty($request->getSession()->get('booking')) ? $info =$request->getSession()->get('booking') : $info = [];
         if (empty($info)) {
             return $this->redirectToRoute('room_index');
@@ -54,12 +60,13 @@ class BookingController extends AbstractController
                 $entityManager->flush();
                 if ($booking->getId() != null) {
                     $listSetRoom = $setRoomRepository->findListBooking($form->get('fromDate')->getData(),$form->get('toDate')->getData(),$form->get('room')->getData());
-
                     foreach ($listSetRoom as $list) {
                         $list->setRoomCOunt($list->getRoomCount()-$form->get('roomCount')->getData());
                         $entityManager->flush();
                     }
                     $session->remove('booking');
+                    $session->remove('fromDate');
+                    $session->remove('toDate');
                 }
 
                 return $this->redirectToRoute('booking_index');
@@ -141,6 +148,7 @@ class BookingController extends AbstractController
                 $price += $setRoom['price'] - ($setRoom['discount'] * $setRoom['price'] / 100);
             }
             $session = new Session();
+            $session->start();
             $infoBooking = [
                 'room'      => $request->request->get('roomId'),
                 'fromDate'  => $fromDate,

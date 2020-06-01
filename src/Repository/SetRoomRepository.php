@@ -98,6 +98,16 @@ class SetRoomRepository extends ServiceEntityRepository
         return $data;
     }
 
+    public function index() {
+        return $this->createQueryBuilder('s')
+                ->Join(DateRoom::class, 'd', Join::WITH, ' s.dateRoom = d.id')
+                ->addOrderBy('s.room','ASC')
+                ->addOrderBy('d.fromDate','ASC')
+                ->getQuery()
+                ->getResult();
+    }
+
+
 
     /*
     public function findOneBySomeField($value): ?SetRoom

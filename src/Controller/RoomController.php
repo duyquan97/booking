@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -34,25 +35,38 @@ class RoomController extends AbstractController
         $form->get('toPrice')->getData() ? $toPrice = $form->get('toPrice')->getData() : $toPrice = '';
         $form->get('fromDate')->getData() ? $fromDate = $form->get('fromDate')->getData() : $fromDate = '';
         $form->get('toDate')->getData() ? $toDate = $form->get('toDate')->getData() : $toDate = '';
+        $listId = null;
+        if ($toPrice != '' && $fromPrice != '' && $fromDate > $toPrice) {
+            $this->addFlash('error', 'Giá phòng không hợp lệ, vui lòng kiểm tra lại!');
+        }
+        else if ($toDate != '' && $fromDate != '' && Carbon::parse($fromDate)->gt(Carbon::parse($toDate))) {
+            $this->addFlash('error', 'Chọn ngày không hợp lệ, vui lòng kiểm tra lại!');
+        }
+        else {
+            $session = new Session();
+            $fromDate != '' ? $session->set('fromDate',Carbon::parse($fromDate)->toDateString()) : $session->set('fromDate','');
+            $toDate != '' ? $session->set('toDate',Carbon::parse($toDate)->toDateString()) : $session->set('toDate','');
+            $datediff = abs(strtotime(Carbon::parse($fromDate)->toDateString()) - strtotime(Carbon::parse($toDate)->toDateString()));
+            $countDay   = floor($datediff / (60 * 60 * 24));
 
-        $datediff = abs(strtotime(Carbon::parse($fromDate)->toDateString()) - strtotime(Carbon::parse($toDate)->toDateString()));
-        $countDay   = floor($datediff / (60 * 60 * 24));
+            $listId = $setRoomRepository->findByExampleField($fromDate,$toDate, $fromPrice, $toPrice, $countDay);
 
-        $listId = $setRoomRepository->findByExampleField($fromDate,$toDate, $fromPrice, $toPrice, $countDay);
-
-        if (($fromDate != '' && $toDate != '') || $toPrice != '' || $fromPrice != '') {
-            if (empty($listId)) {
-                return $this->render('room/index.html.twig', [
-                    'rooms' => [],
-                    'form' => $form->createView()
-                ]);
+            if (($fromDate != '' && $toDate != '') || $toPrice != '' || $fromPrice != '') {
+                if (empty($listId)) {
+                    return $this->render('room/index.html.twig', [
+                        'rooms' => [],
+                        'form' => $form->createView()
+                    ]);
+                }
             }
         }
+
         $rooms = $roomRepository->findBySearch($keyWord, $listId);
         return $this->render('room/index.html.twig', [
             'rooms' => $rooms,
             'form' => $form->createView()
         ]);
+
     }
 
     /**
@@ -84,8 +98,13 @@ class RoomController extends AbstractController
      */
     public function show(Room $room, Request $request, SetRoomRepository $setRoomRepository): Response
     {
+        $session = new Session();
+        $session->get('fromDate') ? $fromDate = $session->get('fromDate') : $fromDate = '';
+        $session->get('toDate') ? $toDate = $session->get('toDate') : $toDate = '';
         return $this->render('room/show.html.twig', [
             'room' => $room,
+            'fromDate' => $fromDate,
+            'toDate' => $toDate,
         ]);
     }
 

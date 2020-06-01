@@ -22,7 +22,7 @@ class SetRoomController extends AbstractController
     {
 
         return $this->render('set_room/index.html.twig', [
-            'set_rooms' => $setRoomRepository->findAll(),
+            'set_rooms' => $setRoomRepository->index(),
         ]);
     }
 

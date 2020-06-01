@@ -32,7 +32,9 @@
                 <td>{{ booking.accept == 1 ? 'On' : 'Off' }}</td>
                 <td>
                     <a href="{{ path('booking_show', {'id': booking.id}) }}">show</a>
-                    <a href="{{ path('booking_edit', {'id': booking.id}) }}">edit</a>
+                    {% if is_granted("ROLE_ADMIN") %}
+                        <a href="{{ path('booking_edit', {'id': booking.id}) }}">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -43,5 +45,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('booking_new') }}">Create new</a>
 {% endblock %}
