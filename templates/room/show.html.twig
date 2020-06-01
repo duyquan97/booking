@@ -68,13 +68,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label> From Date</label>
-                            <input type="text" name="fromDate" class="form-control datetimepicker" required value="{{ fromDate ? fromDate : "now"|date("Y-m-d") }}">
+                            <input type="text" name="fromDate" class="form-control datetimepicker" required value="{{ fromDate ?? "now"|date("Y-m-d") }}">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label> To Date</label>
-                            <input type="text" name="toDate" class="form-control datetimepicker" required value="{{ toDate ? toDate : "tomorrow"|date("Y-m-d") }}">
+                            <input type="text" name="toDate" class="form-control datetimepicker" required value="{{ toDate ?? "tomorrow"|date("Y-m-d") }}">
                         </div>
                     </div>
                     <div class="col-md-6">

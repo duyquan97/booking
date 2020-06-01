@@ -9,6 +9,8 @@ use App\Repository\PriceRoomRepository;
 use App\Repository\RoomRepository;
 use App\Repository\SetRoomRepository;
 use Carbon\Carbon;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,17 +26,17 @@ class RoomController extends AbstractController
     /**
      * @Route("/", name="room_index")
      */
-    public function index(RoomRepository $roomRepository, Request $request, PriceRoomRepository $priceRoomRepository, SetRoomRepository $setRoomRepository): Response
+    public function index(RoomRepository $roomRepository, Request $request, SetRoomRepository $setRoomRepository): Response
     {
-
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
 
-        $form->get('keyWord')->getData() ? $keyWord = $form->get('keyWord')->getData() : $keyWord = '';
-        $form->get('fromPrice')->getData() ? $fromPrice = $form->get('fromPrice')->getData() : $fromPrice = '';
-        $form->get('toPrice')->getData() ? $toPrice = $form->get('toPrice')->getData() : $toPrice = '';
-        $form->get('fromDate')->getData() ? $fromDate = $form->get('fromDate')->getData() : $fromDate = '';
-        $form->get('toDate')->getData() ? $toDate = $form->get('toDate')->getData() : $toDate = '';
+        $keyWord = $form->get('keyWord')->getData() ?? '';
+        $fromPrice = $form->get('fromPrice')->getData() ?? '';
+        $toPrice = $form->get('toPrice')->getData() ?? '';
+        $fromDate = $form->get('fromDate')->getData() ?? '';
+        $toDate = $form->get('toDate')->getData() ?? '';
+
         $listId = null;
         if ($toPrice != '' && $fromPrice != '' && $fromDate > $toPrice) {
             $this->addFlash('error', 'Giá phòng không hợp lệ, vui lòng kiểm tra lại!');
