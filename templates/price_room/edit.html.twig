@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit PriceRoom{% endblock %}
+
+{% block body %}
+    <h1>Edit PriceRoom</h1>
+
+    {{ include('price_room/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('price_room_index') }}">back to list</a>
+
+    {{ include('price_room/_delete_form.html.twig') }}
+{% endblock %}

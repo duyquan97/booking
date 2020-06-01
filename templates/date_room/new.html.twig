@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New DateRoom{% endblock %}
+
+{% block body %}
+    <h1>Create new DateRoom</h1>
+
+    {{ include('date_room/_form.html.twig') }}
+
+    <a href="{{ path('date_room_index') }}">back to list</a>
+{% endblock %}

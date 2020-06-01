@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Booking index{% endblock %}
+
+{% block body %}
+    <h1>Booking index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Code</th>
+                <th>Price</th>
+                <th>FromDate</th>
+                <th>ToDate</th>
+                <th>RoomCount</th>
+                <th>Person</th>
+                <th>Accept</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.id }}</td>
+                <td>{{ booking.code }}</td>
+                <td>{{ booking.price }}</td>
+                <td>{{ booking.fromDate ? booking.fromDate|date('Y-m-d') : '' }}</td>
+                <td>{{ booking.toDate ? booking.toDate|date('Y-m-d') : '' }}</td>
+                <td>{{ booking.roomCount }}</td>
+                <td>{{ booking.person }}</td>
+                <td>{{ booking.accept == 1 ? 'On' : 'Off' }}</td>
+                <td>
+                    <a href="{{ path('booking_show', {'id': booking.id}) }}">show</a>
+                    <a href="{{ path('booking_edit', {'id': booking.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('booking_new') }}">Create new</a>
+{% endblock %}

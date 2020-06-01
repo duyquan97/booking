@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DateRoom{% endblock %}
+
+{% block body %}
+    <h1>DateRoom</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ date_room.id }}</td>
+            </tr>
+            <tr>
+                <th>FromDate</th>
+                <td>{{ date_room.fromDate ? date_room.fromDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>ToDate</th>
+                <td>{{ date_room.toDate ? date_room.toDate|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('date_room_index') }}">back to list</a>
+
+    <a href="{{ path('date_room_edit', {'id': date_room.id}) }}">edit</a>
+
+    {{ include('date_room/_delete_form.html.twig') }}
+{% endblock %}

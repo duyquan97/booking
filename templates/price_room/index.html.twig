@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PriceRoom index{% endblock %}
+
+{% block body %}
+    <h1>PriceRoom index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Price</th>
+                <th>Currency</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for price_room in price_rooms %}
+            <tr>
+                <td>{{ price_room.id }}</td>
+                <td>{{ price_room.price | number_format }}</td>
+                <td>{{ price_room.currency }}</td>
+                <td>
+                    <a href="{{ path('price_room_show', {'id': price_room.id}) }}">show</a>
+                    <a href="{{ path('price_room_edit', {'id': price_room.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('price_room_new') }}">Create new</a>
+{% endblock %}

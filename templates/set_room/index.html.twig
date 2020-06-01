@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SetRoom index{% endblock %}
+
+{% block body %}
+    <h1>SetRoom index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Room Id</th>
+                <th>RoomCount</th>
+                <th>Person</th>
+                <th>Discount</th>
+                <th>Price</th>
+                <th>FromDate</th>
+                <th>ToDate</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for set_room in set_rooms %}
+            <tr>
+                <td>{{ set_room.id }}</td>
+                <td>{{ set_room.room.id }}</td>
+                <td>{{ set_room.roomCount }}</td>
+                <td>{{ set_room.person }}</td>
+                <td>{{ set_room.discount }}</td>
+                <td>{{ set_room.priceRoom.price | number_format }} {{ set_room.priceRoom.currency }}</td>
+                <td>{{ set_room.dateRoom.fromDate ? set_room.dateRoom.fromDate | date('Y-m-d') : '' }}</td>
+                <td>{{ set_room.dateRoom.toDate ? set_room.dateRoom.toDate | date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('set_room_show', {'id': set_room.id}) }}">show</a>
+                    <a href="{{ path('set_room_edit', {'id': set_room.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('set_room_new') }}">Create new</a>
+{% endblock %}

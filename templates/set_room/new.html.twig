@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New SetRoom{% endblock %}
+
+{% block body %}
+    <h1>Create new SetRoom</h1>
+
+    {{ include('set_room/_form.html.twig') }}
+
+    <a href="{{ path('set_room_index') }}">back to list</a>
+{% endblock %}

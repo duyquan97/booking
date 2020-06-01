@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Booking{% endblock %}
+
+{% block body %}
+    <h1>Create new Booking</h1>
+
+    <div class="row">
+        {{ form_start(form) }}
+            <div class="col-md-12">
+                <div class="form-group">
+                    {{ form_row(form.room, {
+                        'attr': {'value': info ? info.room : '' }
+                    }) }}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    {{ form_row(form.fromDate, {
+                        'attr': {'value': info ? info.fromDate|date("Y-m-d") : "now"|date("Y-m-d") }
+                    }) }}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    {{ form_row(form.toDate, {
+                        'attr': {'value': info ? info.toDate|date("Y-m-d") : "tomorrow"|date("Y-m-d") }
+                    }) }}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    {{ form_row(form.price, {
+                        'attr': {'value': info ? info.price : '' , 'readonly':true}
+                    }) }}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    {{ form_row(form.roomCount, {
+                        'attr': {'value': info ? info.roomCount : '' }
+                    }) }}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    {{ form_row(form.person, {
+                        'attr': {'value': info ? info.person : '' }
+                    }) }}
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input type="submit" class="btn btn-success" value="Booking">
+                </div>
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+
+    <a href="{{ path('booking_index') }}">back to list</a>
+{% endblock %}

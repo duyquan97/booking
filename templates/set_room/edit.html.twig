@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit SetRoom{% endblock %}
+
+{% block body %}
+    <h1>Edit SetRoom</h1>
+
+    {{ include('set_room/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('set_room_index') }}">back to list</a>
+
+    {{ include('set_room/_delete_form.html.twig') }}
+{% endblock %}

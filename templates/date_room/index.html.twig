@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DateRoom index{% endblock %}
+
+{% block body %}
+    <h1>DateRoom index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>FromDate</th>
+                <th>ToDate</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for date_room in date_rooms %}
+            <tr>
+                <td>{{ date_room.id }}</td>
+                <td>{{ date_room.fromDate ? date_room.fromDate|date('Y-m-d') : '' }}</td>
+                <td>{{ date_room.toDate ? date_room.toDate|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('date_room_show', {'id': date_room.id}) }}">show</a>
+                    <a href="{{ path('date_room_edit', {'id': date_room.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('date_room_new') }}">Create new</a>
+{% endblock %}
